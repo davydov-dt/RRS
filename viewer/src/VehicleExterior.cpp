@@ -95,13 +95,7 @@ bool VehicleExterior::loadVehicle(const std::string& cfg_dir, const std::string&
 
     // Интерактивные органы кабины (клик по Alt, ТЗ "Взаимодействие
     // с элементами кабины")
-    cab_elements = loadCabElements(cfg_path);
 
-    if (!cab_elements.empty())
-    {
-        LOG_INFO("Cab interaction: %u elements from %s",
-                 static_cast<unsigned>(cab_elements.size()), cfg_path.c_str());
-    }
 
     transform->setValue("name", cfg_file);
     return (transform->children.size() > 0);
@@ -420,6 +414,8 @@ bool VehicleExterior::load_io_controller_module(const std::string &cfg_path, Cfg
     // Просматриваем все кабины в конфиге
     auto secNode = cfg.getFirstSection("Cabine");
 
+    io_controls.clear();
+
     while (!secNode.isNull())
     {
         QString module_name = "";
@@ -449,7 +445,7 @@ bool VehicleExterior::load_io_controller_module(const std::string &cfg_path, Cfg
 
                 if (!module_cfg.load(QString(module_config_path.c_str())))
                 {
-                    LOG_WARN("IOController config %s is not found. IOController in defualt settings", module_config_path.c_str());
+                    LOG_WARN("IOController config %s is not found. IOController in default settings", module_config_path.c_str());
                 }
                 else
                 {
@@ -459,13 +455,15 @@ bool VehicleExterior::load_io_controller_module(const std::string &cfg_path, Cfg
             }
             else
             {
-                LOG_WARN("IOController config setting is not exist. IOController in defualt settings");
+                LOG_WARN("IOController config setting is not exist. IOController in default settings");
             }
         }
         else
         {
             LOG_ERROR("Not found IOController module %s", module_path.c_str());
         }
+
+        LOG_INFO("IOController: io_controls size: %d", io_controls.size());
 
         io_controls.push_back(io_control);
         secNode = cfg.getNextSection();

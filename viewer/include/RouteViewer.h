@@ -20,6 +20,8 @@ class  SoundManager;
 class  TcpClient;
 class  TrafficLightsHandler;
 class  UpdateViewerHandler;
+class  InputRouteHandler;
+class  CabMouseHandler;
 class  VehiclesHandler;
 class  WorldCulling;
 
@@ -180,6 +182,8 @@ private slots:
 
     void slotUpdated();
 
+    void slotOnCurrentVehicleChanged(int newIndex, int oldIndex);
+
 private:
     bool  is_ready = false;
     bool  is_connection_abandoned = false;
@@ -189,8 +193,10 @@ private:
 
     settings_t settings;
 
-    vsg::ref_ptr<GUIParams>            GUIparams;
-    vsg::ref_ptr<UpdateViewerHandler>  upd_viewer_handler;
+    vsg::ref_ptr<GUIParams>             GUIparams;
+    vsg::ref_ptr<UpdateViewerHandler>   upd_viewer_handler;
+    vsg::ref_ptr<InputRouteHandler>     input_route_handler;
+    vsg::ref_ptr<CabMouseHandler>       cab_mouse_handler;
 
     std::unique_ptr<TcpClient>             tcp_client;
     std::unique_ptr<SoundManager>          sound_manager;
